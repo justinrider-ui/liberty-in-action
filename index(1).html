@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liberty in Action — 250th Anniversary Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#f3e9d2;--parchment-deep:#e7d8b6;--ink:#16213a;--ink-soft:#3a4763;
+    --red:#9e2b25;--red-deep:#7c1f1c;--gold:#b08530;--gold-soft:#cba85a;--cream:#fbf6ea;
+    --green:#2f7d4f;--green-deep:#1f5a37;
+    --line:rgba(22,33,58,.16);--shadow:0 18px 40px -22px rgba(22,33,58,.55);--radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Newsreader",Georgia,serif;background:var(--parchment);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;position:relative}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 50% -10%, rgba(255,255,255,.5), transparent 55%),radial-gradient(120% 120% at 50% 120%, rgba(124,31,28,.07), transparent 60%);mix-blend-mode:multiply}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px}
+
+  header.bar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#16213a,#1d2c4d);color:var(--cream);border-bottom:3px solid var(--gold);box-shadow:0 6px 24px -10px rgba(0,0,0,.6)}
+  .bar-inner{display:flex;align-items:center;gap:14px;padding:11px 22px;max-width:1080px;margin:0 auto}
+  .emblem{flex:0 0 auto;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 50% 35%,var(--red),var(--red-deep));border:2px solid var(--gold-soft);box-shadow:inset 0 0 0 3px rgba(251,246,234,.12)}
+  .emblem svg{width:24px;height:24px}
+  .bar-title{font-family:"Fraunces",serif;font-weight:900;font-size:1.04rem;letter-spacing:.2px;line-height:1}
+  .bar-sub{font-family:"Public Sans",sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);margin-top:3px}
+  .bar-spacer{flex:1}
+  .ring-wrap{display:flex;align-items:center;gap:10px;cursor:pointer}
+  .ring{position:relative;width:40px;height:40px}.ring svg{transform:rotate(-90deg)}
+  .ring-num{position:absolute;inset:0;display:grid;place-items:center;font-family:"Public Sans";font-weight:700;font-size:.72rem;color:var(--cream)}
+  .ring-label{font-family:"Public Sans";font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);text-align:right;line-height:1.3}
+
+  .hero{padding:54px 0 30px;text-align:center;position:relative}
+  .eyebrow{font-family:"Public Sans";font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--red);font-weight:700}
+  .hero h1{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(2.6rem,7vw,4.7rem);line-height:.95;margin:14px 0 6px;letter-spacing:-.5px}
+  .hero h1 em{font-style:italic;color:var(--red);font-weight:500}
+  .hero .deck{font-size:1.12rem;color:var(--ink-soft);max-width:600px;margin:6px auto 0;font-style:italic}
+  .stars{display:flex;justify-content:center;gap:14px;margin:22px 0 4px;color:var(--gold)}.stars span{font-size:1.1rem}
+  .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
+  .fact{background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-family:"Public Sans";font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 2px 0 rgba(22,33,58,.05)}
+  .fact b{color:var(--red)}
+  .src-btn{display:inline-flex;align-items:center;gap:8px;margin-top:24px;background:var(--ink);color:var(--cream);font-family:"Public Sans";font-weight:600;font-size:.82rem;text-decoration:none;padding:11px 20px;border-radius:999px;border:1px solid var(--gold);transition:.18s}
+  .src-btn:hover{background:var(--red);border-color:var(--red)}
+
+  .sec{margin:42px 0}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-head h2{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(1.5rem,3.4vw,2.1rem);white-space:nowrap}
+  .sec-head .rule{flex:1;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .sec-head .kick{font-family:"Public Sans";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--red);font-weight:700}
+  .sec-intro{color:var(--ink-soft);max-width:720px;margin-bottom:22px;font-size:1.02rem}
+
+  .fasttrack{background:linear-gradient(135deg,#16213a,#23365c);color:var(--cream);border-radius:18px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;border:1px solid rgba(203,168,90,.4)}
+  .fasttrack::before{content:"★";position:absolute;right:-10px;top:-22px;font-size:9rem;color:rgba(203,168,90,.1);font-family:"Fraunces"}
+  .fasttrack .tag{font-family:"Public Sans";font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:700}
+  .fasttrack h3{font-family:"Fraunces";font-weight:900;font-size:1.7rem;margin:8px 0 10px;line-height:1.05}
+  .fasttrack p{color:#dfe6f2;max-width:660px;font-size:1.02rem}
+  .fasttrack p b{color:var(--gold-soft)}
+  .ft-btn{margin-top:18px;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:none;cursor:pointer;font-family:"Public Sans";font-weight:700;font-size:.86rem;padding:11px 22px;border-radius:999px;transition:.18s}
+  .ft-btn:hover{background:var(--cream)}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}
+  .search{flex:1;min-width:220px;position:relative}
+  .search input{width:100%;font-family:"Public Sans";font-size:.92rem;padding:12px 14px 12px 40px;border:1px solid var(--line);border-radius:11px;background:var(--cream);color:var(--ink)}
+  .search input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,133,48,.18)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;opacity:.5}
+  .hint{font-family:"Public Sans";font-size:.74rem;color:var(--ink-soft);background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:8px 14px}
+
+  .req{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;box-shadow:0 2px 0 rgba(22,33,58,.04)}
+  .req-head{display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;user-select:none}
+  .req-num{flex:0 0 auto;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-family:"Fraunces";font-weight:900;font-size:1.4rem;background:radial-gradient(circle at 40% 30%,var(--red),var(--red-deep));color:var(--cream);box-shadow:inset 0 -3px 6px rgba(0,0,0,.25)}
+  .req.done .req-num{background:radial-gradient(circle at 40% 30%,var(--green),var(--green-deep))}
+  .req-meta{flex:1;min-width:0}
+  .req-meta .kick{font-family:"Public Sans";font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:700}
+  .req-meta h3{font-family:"Fraunces";font-weight:600;font-size:1.22rem;line-height:1.1;margin-top:2px}
+  .req-meta .theme{font-size:.92rem;color:var(--ink-soft);margin-top:4px}
+  .req-status{flex:0 0 auto;display:flex;align-items:center;gap:10px}
+  .req-count{font-family:"Public Sans";font-size:.7rem;font-weight:700;color:var(--ink-soft);background:var(--parchment);padding:6px 11px;border-radius:999px;white-space:nowrap}
+  .req.done .req-count{background:#dff0e4;color:var(--green-deep)}
+  .caret{transition:transform .25s;opacity:.5}.req.open .caret{transform:rotate(180deg)}
+  .req-body{display:none;padding:4px 20px 20px;border-top:1px dashed var(--line)}
+  .req.open .req-body{display:block}
+  .req-blurb{font-size:.92rem;color:var(--ink-soft);margin:14px 0 6px;line-height:1.5}
+  .choose-label{font-family:"Public Sans";font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--red);margin:16px 0 10px;display:flex;align-items:center;gap:8px}
+  .choose-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .opt{display:flex;gap:13px;align-items:flex-start;background:var(--parchment);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-bottom:10px;transition:.15s}
+  .opt.checked{border-color:var(--green);background:#eef6ef}
+  .opt-check{flex:0 0 auto;width:24px;height:24px;border-radius:7px;border:2px solid var(--line);background:var(--cream);cursor:pointer;display:grid;place-items:center;margin-top:1px;transition:.15s}
+  .opt.checked .opt-check{background:var(--green);border-color:var(--green)}
+  .opt-check svg{width:14px;height:14px;opacity:0;transition:.15s}.opt.checked .opt-check svg{opacity:1}
+  .opt-main{flex:1;min-width:0}
+  .opt-top{display:flex;gap:9px;align-items:baseline}
+  .opt-letter{flex:0 0 auto;font-family:"Fraunces";font-weight:900;font-style:italic;color:var(--red);font-size:1.05rem;line-height:1.3}
+  .opt-text{font-size:.98rem;line-height:1.45}
+  .opt-text ul{margin:6px 0 0 2px;padding:0;list-style:none}
+  .opt-text ul li{position:relative;padding-left:16px;font-size:.9rem;color:var(--ink-soft);margin-top:2px}
+  .opt-text ul li::before{content:"\201C";position:absolute;left:0;color:var(--gold);font-weight:700}
+  .opt-sub{font-size:.85rem;color:var(--ink-soft);font-style:italic;margin-top:5px}
+  .ideas-toggle{margin-top:11px;display:inline-flex;align-items:center;gap:7px;background:var(--cream);border:1px solid var(--gold-soft);color:var(--ink);cursor:pointer;font-family:"Public Sans";font-weight:600;font-size:.76rem;padding:7px 13px;border-radius:999px;transition:.15s}
+  .ideas-toggle:hover{background:#fff6e8}
+  .ideas-toggle .cv{transition:transform .2s}.ideas-toggle.open .cv{transform:rotate(180deg)}
+  .ideas-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:12px}
+  .ideas-grid.open{display:grid}
+  .act{position:relative;text-align:left;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:13px 13px 12px;cursor:pointer;transition:.16s;font-family:inherit;color:inherit}
+  .act:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:var(--shadow)}
+  .act h4{font-family:"Fraunces";font-weight:600;font-size:.98rem;line-height:1.12}
+  .act .snap{font-size:.8rem;color:var(--ink-soft);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .act .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+  .tag-pill{font-family:"Public Sans";font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:var(--parchment);border:1px solid var(--line);color:var(--ink-soft)}
+  .no-results{text-align:center;color:var(--ink-soft);font-style:italic;padding:30px 0;display:none}
+
+  .modal-back{position:fixed;inset:0;z-index:100;background:rgba(16,24,40,.55);backdrop-filter:blur(3px);display:none;padding:24px;overflow-y:auto}
+  .modal-back.open{display:flex;align-items:flex-start;justify-content:center}
+  .modal{background:var(--parchment);max-width:680px;width:100%;border-radius:18px;box-shadow:0 40px 80px -20px rgba(0,0,0,.6);border:1px solid var(--gold-soft);margin:auto;animation:rise .3s ease}
+  @keyframes rise{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-top{position:relative;background:linear-gradient(135deg,#16213a,#23365c);color:var(--cream);padding:24px 26px;border-radius:18px 18px 0 0}
+  .modal-top .kick{font-family:"Public Sans";font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);font-weight:700}
+  .modal-top h3{font-family:"Fraunces";font-weight:900;font-size:1.7rem;line-height:1.05;margin:6px 0 8px}
+  .modal-top .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .modal-top .tag-pill{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:var(--gold-soft)}
+  .x-btn{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:var(--cream);cursor:pointer;font-size:1.1rem;line-height:1;display:grid;place-items:center}
+  .x-btn:hover{background:var(--red)}
+  .modal-body{padding:22px 26px 28px}
+  .modal-body .snapshot{font-size:1.05rem;font-style:italic;color:var(--ink-soft);margin-bottom:20px}
+  .block-h{font-family:"Public Sans";font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--red);margin:22px 0 10px;display:flex;align-items:center;gap:9px}
+  .block-h::after{content:"";flex:1;height:1px;background:var(--line)}
+  ul.supplies{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
+  ul.supplies li{position:relative;padding-left:20px;font-size:.92rem}
+  ul.supplies li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
+  ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:11px}
+  ol.steps li{position:relative;padding-left:38px;font-size:.96rem;counter-increment:s}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--cream);font-family:"Public Sans";font-weight:700;font-size:.78rem;display:grid;place-items:center}
+  .substep{list-style:none;margin:7px 0 0 4px;padding:0;display:flex;flex-direction:column;gap:4px}
+  .substep li{padding-left:16px;position:relative;font-size:.88rem;color:var(--ink-soft)}
+  .substep li::before{content:"\2013";position:absolute;left:0}
+  .script{background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 16px;font-size:.92rem;white-space:pre-wrap;line-height:1.6}
+  .script b{color:var(--red)}
+  .res a{color:var(--red);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(158,43,37,.3);word-break:break-word}
+  .res a:hover{border-color:var(--red)}
+  .res-none{font-style:italic;color:var(--ink-soft);font-size:.9rem}
+  .modal-foot{padding:0 26px 26px}
+  .toggle-done{width:100%;border:none;cursor:pointer;font-family:"Public Sans";font-weight:700;font-size:.9rem;padding:13px;border-radius:11px;background:var(--ink);color:var(--cream);transition:.16s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .toggle-done:hover{background:var(--red)}
+  .toggle-done.is-done{background:var(--green)}
+  .modal-foot .ctx{font-size:.82rem;color:var(--ink-soft);text-align:center;margin-bottom:10px;font-style:italic}
+
+  .safety{background:#fff6e8;border:1px solid var(--gold-soft);border-radius:var(--radius);padding:18px 20px;display:flex;gap:14px;align-items:flex-start}
+  .safety .ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--gold);display:grid;place-items:center;color:var(--ink)}
+  .safety h4{font-family:"Fraunces";font-weight:600;font-size:1.08rem}
+  .safety p{font-size:.9rem;color:var(--ink-soft);margin-top:4px}
+  .safety a{color:var(--red);font-weight:600}
+  footer{text-align:center;padding:40px 22px 56px;color:var(--ink-soft);font-size:.84rem}
+  footer .div{width:80px;height:2px;background:var(--gold);margin:0 auto 18px}
+  footer a{color:var(--red);font-weight:600;text-decoration:none}
+  .reset{margin-top:14px;background:none;border:1px solid var(--line);color:var(--ink-soft);font-family:"Public Sans";font-size:.74rem;padding:7px 14px;border-radius:999px;cursor:pointer}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+
+  @media(max-width:560px){
+    ul.supplies{grid-template-columns:1fr}.ring-label{display:none}.req-meta .theme{display:none}
+    .modal-back{padding:0}.modal{border-radius:0;min-height:100%}.modal-top{border-radius:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="emblem" title="Liberty in Action">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.9H21l-5.6 4.1 2.2 6.9L12 15.8 6.4 19.9l2.2-6.9L3 8.9h6.6L12 2z" fill="#fbf6ea"/></svg>
+    </div>
+    <div>
+      <div class="bar-title">Liberty in Action</div>
+      <div class="bar-sub">250th Anniversary Challenge</div>
+    </div>
+    <div class="bar-spacer"></div>
+    <div class="ring-wrap" onclick="document.getElementById('requirements').scrollIntoView()">
+      <div class="ring">
+        <svg width="40" height="40"><circle cx="20" cy="20" r="16" stroke="rgba(255,255,255,.18)" stroke-width="4" fill="none"/><circle id="ringFill" cx="20" cy="20" r="16" stroke="#cba85a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+        <div class="ring-num" id="ringNum">0/5</div>
+      </div>
+      <div class="ring-label">Categories<br>Complete</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">Scouting America · America250</div>
+    <h1>Liberty <em>in</em> Action</h1>
+    <p class="deck">Connecting America's founding ideals to citizenship and service — earned by completing one activity from each of five categories.</p>
+    <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+    <div class="facts">
+      <div class="fact">🏅 <span>Open to <b>all</b> programs &amp; families</span></div>
+      <div class="fact">📅 <span>Earn <b>Mar 2026 – Feb 2027</b></span></div>
+      <div class="fact">🎯 <span><b>1 of each</b> of 5 categories</span></div>
+    </div>
+    <a class="src-btn" href="https://www.scouting.org" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3h7v7M21 3l-9 9M5 5v14h14v-7"/></svg>
+      Official requirements at scouting.org
+    </a>
+  </section>
+
+  <section class="sec">
+    <div class="fasttrack">
+      <div class="tag">★ The Cub Scout Shortcut</div>
+      <h3>One Pack Meeting · All Five Categories</h3>
+      <p>Scouting America's Cub Scout activity guide includes a complete birthday-party pack meeting that satisfies <b>options 1b, 2a, 3d, 4d, and the service milestone</b> in a single event — a mural, audience story, three activity stations, a 250th party, and a candle-lighting close. Tap for the full run-of-show with leader scripts.</p>
+      <button class="ft-btn" onclick="openMeeting()">Open the Pack Meeting Plan →</button>
+    </div>
+  </section>
+
+  <section class="sec" id="requirements">
+    <div class="sec-head">
+      <span class="kick">Choose your path</span>
+      <h2>The Five Categories</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="sec-intro">Complete <b>one option from each category</b> to earn the patch. Options marked with a Cub Scout ribbon include ready-to-run activity ideas from the official guide — tap them for supplies, directions, and scripts. Check off the option you choose; the ring up top tracks your five categories.</p>
+
+    <div class="toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="searchInput" type="text" placeholder="Search options &amp; activities — candles, speech, time capsule, service…" oninput="applyFilters()">
+      </div>
+      <div class="hint">📋 Pick 1 per category</div>
+    </div>
+
+    <div id="reqList"></div>
+    <div class="no-results" id="noResults">Nothing matches your search. Try another word or clear it.</div>
+  </section>
+
+  <section class="sec">
+    <div class="safety">
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></div>
+      <div>
+        <h4>Before any activity — keep it SAFE</h4>
+        <p>Run the Scouting America <b>SAFE Checklist</b>, stay familiar with the <b>Guide to Safe Scouting</b>, and watch for local rules that supersede Scouting practice. Requirement 5 service hours tie into the <b>Impact365</b> initiative. The requirement wording here mirrors the official challenge sheet — for the authoritative version and any updates, defer to <a href="https://www.scouting.org" target="_blank" rel="noopener">scouting.org</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="div"></div>
+  <p>An unofficial navigation tool. Requirements per Scouting America's Liberty in Action Challenge sheet; Cub activity ideas from the official <a href="https://www.scouting.org/wp-content/uploads/2026/04/Liberty-in-Action-Cub-Scout-Activity-Idea-Guide.pdf" target="_blank" rel="noopener">Activity Idea Guide</a>.<br>Content © Scouting America / Boy Scouts of America. Always confirm requirements at <a href="https://www.scouting.org" target="_blank" rel="noopener">scouting.org</a>.</p>
+  <button class="reset" onclick="resetProgress()">Reset my progress</button>
+</footer>
+
+<div class="modal-back" id="modalBack" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+/* ============================================================
+   OFFICIAL REQUIREMENTS — Liberty in Action 250th Challenge
+   (choose one option per category; category 5 is a single requirement)
+   Cub activity ideas attached to the option each one fulfills.
+   ============================================================ */
+
+/* --- reusable Cub activity definitions --- */
+const A = {
+  mural:{name:"Stars, Stripes & Sketches",tags:["Craft","Gathering"],snap:"Cubs help create a giant pack mural showing what fairness, freedom, and happiness mean to them.",supplies:["White butcher paper","Painter's tape","Markers"],during:[{t:"Explain that everyone may draw or write what makes them feel free, how people can be fair, or what brings them happiness."},{t:"Give Cubs time to add to the mural. Prompts:",sub:["A time you helped someone","Something that makes you happy","A time someone was kind to you","A special family memory"]},{t:"Hang the finished mural as party decoration."}],resources:[]},
+  lego:{name:"Build the American Dream",tags:["Build"],snap:"Cubs build a LEGO model representing fairness, freedom, or happiness to them.",supplies:["LEGO base plate (1/Scout)","Assorted bricks (30+/Scout)","Minifigs (2/Scout)"],during:[{t:"Explain America was founded on big ideas: fairness, freedom, the pursuit of happiness."},{t:"Ask Cubs what one of these means to them."},{t:"Give a base plate and invite them to build it — no right or wrong answer."},{t:"Share each creation and what it represents."}],resources:[]},
+  collage:{name:"Picture What Matters!",tags:["Craft"],snap:"Cubs make a collage reminding them of fairness, freedom, or happiness.",supplies:["Poster board (1/Scout)","Markers","Magazines","Scissors (1/3 Scouts)","Glue sticks (1/3 Scouts)"],during:[{t:"Each Cub makes a collage representing one core value."},{t:"Look through magazines for pictures, words, colors that match the idea."},{t:"Cut out chosen pieces (adult help as needed)."},{t:"Arrange without gluing, then glue once happy with it."},{t:"Share the collage and how it relates to the value."}],resources:[]},
+  story:{name:"Cub Scouts Do Their Best!",tags:["Story"],snap:"An audience-participation story about civic service and the Scouting movement.",supplies:["Printer","Printed copy of the script"],before:["Print the script."],during:[{t:"Narrator follows the script below."}],script:`LEADER: Any time I say "Cub Scout," you say "Do Your Best!" Cub Scout!
+AUDIENCE: Do Your Best!
+LEADER: Any time I say "Help our town," clap three times and say "We can help!" Help our town!
+AUDIENCE: Clap, clap, clap. We can help!
+LEADER: One morning, a group of Cub Scouts—
+AUDIENCE: Do Your Best!
+LEADER: —met in the park and noticed trash everywhere. The Cub Scouts—
+AUDIENCE: Do Your Best!
+LEADER: —said, "We need to — Help our town!"
+AUDIENCE: Clap, clap, clap. We can help!
+LEADER: They grabbed gloves and bags and cleaned the park. The mayor said, "Thank you, Cub Scouts—"
+AUDIENCE: Do Your Best!
+LEADER: Then they helped a neighbor carry groceries, planted flowers, and made cards for people who were sick. By day's end the town was cleaner, happier, and kinder. So whenever you see a chance to help, what do we do, Cub Scouts?
+AUDIENCE: Do Your Best!
+LEADER: Our story is over — but your acts of service are just beginning.`,resources:[]},
+  pouch:{name:"Home Front Helper",tags:["Craft"],snap:"Inspired by WWII messenger Scouts, Cubs make a recycled message pouch for notes of kindness.",supplies:["Empty, dry Capri Sun pouches (1/Scout)","Paracord, 24\" fused (1/Scout)","Lighter","Scissors","Hole punch","White spray paint","Paint markers","Colorful Duck Tape","3x5 index cards (3/Scout)","Pencils","Markers"],before:[{t:"Empty, trim ½\" off the top, clean and dry the pouches."},{t:"Punch a hole in the top corner (front layer only), ½\" from the edge."},{t:"Spray paint pouches white; cut and fuse paracord to 24\"."},{t:"Set up a clean workspace."}],during:[{t:"Tell the WWII story: Scouts carried messages by hand when phones failed — what mattered was who was willing to help."},{t:"Decorate pouches with paint markers and Duck Tape."},{t:"Thread paracord through the holes; knot each end for a strap."},{t:"Write kindness messages on index cards:",sub:["I can help at home by ___.","I can help at school by ___.","A Scout is helpful.","Today I will Do My Best."]},{t:"Tuck cards inside; clean up and wash hands."}],resources:[]},
+  firstaid:{name:"Be Prepared to Help",tags:["Skill"],snap:"Cubs practice simple first aid, inspired by Scouts who helped after a train accident.",supplies:["Band-Aids (1/Scout)","Bandages (1/5 Scouts)","Gauze pads (1/5 Scouts)","Gloves (1 pair/Scout)","Stuffed animal"],before:[{t:"Set up three stations: Bandage a Buddy, Comfort and Care, Call for Help."}],during:[{t:"Tell the true story: prepared Scouts stayed calm, used first aid, and got help after a train accident."},{t:"Bandage a Buddy: gloves on, place gauze + bandage on the stuffed animal, then a Band-Aid on a buddy's finger."},{t:"Comfort and Care: practice calm, helpful phrases for someone hurt."},{t:"Call for Help: practice telling an adult what happened, where, and your name."},{t:"Rotate all groups through every station; discuss why staying calm matters."}],resources:[{label:"Scouting Magazine: train-derailment lifesaving heroes",url:"https://blog.scoutingmagazine.org/2022/10/28/train-derailment-heroes-recognized-with-bsa-lifesaving-awards-watch-and-share-this-inspiring-video/"}]},
+  bloom:{name:"Bloom Balls",tags:["Craft","Conservation"],snap:"Cubs make seed bloom balls and learn how national spirit grows through conservation service.",supplies:["Native/wildflower seeds (1 Tbsp/Scout)","Recycled paper (3 sheets/Scout)","Compost/soil (2 cups/Scout)","Water","Mixing bowls","Trays"],before:[{t:"Tear and soak paper ~30 min until soft; drain and store damp."}],during:[{t:"Tell the 1954 story: President Eisenhower's National Conservation Good Turn — Scouts planted 6+ million trees. Bloom balls continue that spirit."},{t:"Mix 2 cups pulp + 1 Tbsp seeds + 2 cups soil by hand."},{t:"Roll into golf-ball-sized balls (each with seeds, pulp, soil)."},{t:"Dry on trays; send home with planting instructions (24–48 hr dry, plant with permission in sun)."}],resources:[]},
+  carnival:{name:"Colonial Games Carnival",tags:["Game"],snap:"Three colonial-era games: hopscotch, Graces, and nine-pin bowling.",supplies:["Painter's tape","Small bean bag","10\" wooden hoop (1/2 Scouts)","¼\"x12\" dowels (2/Scout)","9 sand-weighted bottles","Small ball"],before:[{t:"Tape hopscotch courts; set up the Graces and nine-pin stations; assign an adult per game."}],during:[{t:"Explain that before screens, kids played games like these for fun and exercise."},{t:"Hopscotch: toss the bean bag into a square and hop the pattern, skipping the marked square."},{t:"Graces: partners fling a hoop between crossed sticks and catch it."},{t:"Nine-pin bowling: roll the ball to knock down pins."},{t:"Rotate everyone through all three; cheer good sportsmanship."}],resources:[]},
+  candle:{name:"Rolled Beeswax Candle Making",tags:["Craft"],snap:"Cubs roll a beeswax candle and reflect on carrying the light of freedom forward.",supplies:["Beeswax sheets 8x8\" (1/Scout)","Cotton wicks 9\" (1/Scout)","Scissors"],before:[{t:"Pre-cut wicks to 9\"."}],during:[{t:"Explain colonial families made their own candles from beeswax or animal fat."},{t:"Place the wick along one edge of the sheet."},{t:"Press the edge tightly around the wick to start the roll."},{t:"Roll slowly, tight and straight; press the end to seal."},{t:"Trim the wick to ~½\"."}],resources:[]},
+  hopscotch:{name:"Hopscotch",tags:["Game"],snap:"A standalone colonial hopscotch game with full court layout and rules.",supplies:["Sidewalk chalk (outdoor)","Painter's tape (indoor)","Bean bag or flat stone"],before:[{t:"Lay out the court with 12–18\" squares:",sub:["1","2","3 & 4 side-by-side","5","6 & 7 side-by-side","8","9 & 10 side-by-side","Home semicircle at top"]}],during:[{t:"Objective: hop through every square while tossing and retrieving your marker."},{t:"A turn ends on a line, lost balance, or forgetting to skip the marker square; resume from your last number."},{t:"Toss into square 1, hop the pattern skipping that square, turn at the end, pick up the marker, and finish."},{t:"Next turn, toss into square 2, and so on. First to finish all squares wins."}],resources:[{label:"How to play hopscotch (YouTube)",url:"https://www.youtube.com/watch?v=fZzswQaICfM"}]},
+  butter:{name:"Butter Churning",tags:["Food"],snap:"Cubs shake cream into butter in a jar, just like early Americans.",supplies:["Heavy cream (3 Tbsp/Scout)","Tablespoon","Salt","4 oz mason jar w/ lid (1/Scout)","Crackers or bread","Butter knife"],during:[{t:"Add 3 Tbsp cream to a jar (about half full) and seal tightly."},{t:"Shake 1–2 min to whipped cream — keep going!"},{t:"After 2–5 more min the butter separates (~8–10 min total)."},{t:"Pour off the buttermilk (adult help); rinse with a little cold water."},{t:"Add a pinch of salt and spread on bread or crackers."}],resources:[]},
+  sachet:{name:"Herbal Sachets",tags:["Craft"],snap:"Cubs craft fragrant sachets like colonial families used to freshen rooms.",supplies:["Lavender, rose petals, rosemary, mint, cloves, cinnamon","Mixing bowl & pestle","Scissors","6x6\" cotton squares (1/Scout)","12\" ribbon (1/Scout)","Lighter"],before:[{t:"Cut fabric to 6\" and ribbon to 12\" (fuse ends); mix and lightly crush the herbs."}],during:[{t:"Explain colonial families used herb sachets to freshen homes and repel insects."},{t:"Scoop 3 Tbsp of the mixture into the center of a fabric square."},{t:"Gather the corners and tie closed with ribbon in a square knot."}],resources:[]},
+  johnny:{name:"Johnny Cakes",tags:["Food"],snap:"Cubs make Johnny Cakes — a cornmeal bread staple of early American kitchens.",supplies:["1 cup cornmeal","½ tsp salt","1 Tbsp sugar","1 cup boiling water","2 Tbsp butter","½ cup milk","Skillet/griddle","Butter & maple syrup","Plates & forks"],before:[{t:"Measure ingredients (makes 8 small cakes)."}],during:[{t:"Stir cornmeal, salt, and sugar."},{t:"Add boiling water gradually into a thick batter; rest 5 min."},{t:"Thin with a splash of milk to thick-oatmeal consistency if needed."},{t:"Cook 2–3 Tbsp spoonfuls on a buttered skillet, 3–4 min per side until golden."},{t:"Serve warm with butter and maple syrup."}],resources:[]},
+  bday:{name:"Happy Birthday, America!",tags:["Celebration","Food"],snap:"Cubs throw a birthday party for the United States.",supplies:["Cupcakes (1/person)","Plates & napkins","Red/white/blue table covering","Trash bags"],before:[{t:"Set a patriotic table with cupcakes, plates, and napkins."}],during:[{t:"Explain we celebrate our country's birthday — America turns 250."},{t:"Sing \"Happy Birthday\" to America and serve cupcakes."},{t:"Lead a cheer, enjoy refreshments, and clean up together."}],resources:[]},
+  parade:{name:"4th of July Parade",tags:["Celebration","Outdoor"],snap:"The pack prepares for and marches in a Fourth of July parade.",supplies:["Pack & den flags","American flags","Banner with pack number","Water, sunscreen, first aid kit","Wagon","Decorations"],before:[{t:"Register for the parade; review rules; gather flags and supplies."},{t:"Decide uniform vs. activity shirt; remind families about water and sunscreen; check the forecast."}],during:[{t:"Check in at the lineup; review expectations (stay together, respect the flag, Scout Law)."},{t:"Walk the route showing Cub Scout spirit; reflect on citizenship at the end."},{t:"Sign a thank-you note to the organizers."}],resources:[]},
+  a250:{name:"America250 Event",tags:["Celebration"],snap:"Attend a local or regional America250 event.",supplies:["None required"],before:[{t:"Find an event on the America250 website.",link:{label:"america250.org",url:"https://america250.org/"}},{t:"Register if needed; review rules and details with families."}],during:[{t:"Check in; review expectations; reflect on citizenship at the end; thank the organizers."}],resources:[{label:"America250 events",url:"https://america250.org/"}]},
+  food:{name:"Scouting for Food",tags:["Service"],snap:"Join the long-running Scouting for Food good turn — collecting and donating food.",supplies:["See project guidance at scouting.org"],before:[{t:"Coordinate with your council or food bank."}],during:[{t:"Collect and donate as a den or pack; record service hours."}],resources:[{label:"Service-project details at scouting.org",url:"https://www.scouting.org"}]},
+  troops:{name:"10,000 for Troops",tags:["Service","Craft"],snap:"Make thank-you cards for service members — a great pack-meeting station.",supplies:["Card stock / blank cards","Markers, crayons, decorations"],before:[{t:"Gather supplies and review project guidance."}],during:[{t:"Write and decorate cards; submit per instructions; log service hours."}],resources:[{label:"Service-project details at scouting.org",url:"https://www.scouting.org"}]},
+  more:{name:"12 More Service Project Ideas",tags:["Service"],snap:"The guide offers a dozen more service options for this milestone.",supplies:["Varies by project"],before:[{t:"Browse the additional ideas in the official guide."}],during:[{t:"Plan and carry out your chosen project; record and submit hours."}],resources:[{label:"Open the official guide (Requirement 5)",url:"https://www.scouting.org/wp-content/uploads/2026/04/Liberty-in-Action-Cub-Scout-Activity-Idea-Guide.pdf"}]}
+};
+
+const PROGRAM = {
+  requirements:[
+    {
+      id:1, title:"Founding Ideals in Today's Life",
+      theme:"Connect the founding principles of the Declaration of Independence to modern life.",
+      blurb:"Explore core values like equality, liberty, and the pursuit of happiness, then apply them to real experiences and share with a family member, friend, or your unit.",
+      chooseOne:true,
+      options:[
+        {letter:"a", text:"Research what these three famous phrases from the Declaration meant in 1776 and what they mean today, with modern real-life examples, shared with a family member, friend, or your unit:", list:["We hold these truths to be self-evident…","All men are created equal…","Life, Liberty, and the pursuit of Happiness…"], activities:[]},
+        {letter:"b", text:"Identify something that makes you think of fairness, freedom, or happiness; share it with a family member, friend, or your unit; and explain how it connects to your life.", sub:"Cub Scout activity ideas for this option:", activities:["mural","lego","collage"]}
+      ]
+    },
+    {
+      id:2, title:"Civic Spirit & Scouting",
+      theme:"Discover how Scouting has promoted national service and civic leadership.",
+      blurb:"Research moments when Scouting supported the national spirit, or capture what Scouting represents today in a time capsule.",
+      chooseOne:true,
+      options:[
+        {letter:"a", text:"Research and share examples of times Scouting America or the Exploring program supported national spirit — service efforts, national events, or community initiatives — with a family member, friend, or your unit.", sub:"Cub Scout activity ideas that fit this option:", activities:["story","pouch","firstaid","bloom"]},
+        {letter:"b", text:"Create a time capsule — real, digital, or a simple list — of items that best show what Scouting in America (or Exploring) is all about.", activities:[]}
+      ]
+    },
+    {
+      id:3, title:"Creative Expression",
+      theme:"Celebrate the 250th through art, speech, performance, or media.",
+      blurb:"Bring history to life with design, public speaking, storytelling, or a hands-on skill from the founding era.",
+      chooseOne:true,
+      options:[
+        {letter:"a", text:"Design a unit-level shoulder patch or commemorative coin for the U.S. Semiquincentennial, and explain the symbolism you chose to a family member, friend, or your unit.", activities:[]},
+        {letter:"b", text:"Perform a 2–3 minute speech on one topic: what liberty means to me in 2026; one right I won't take for granted; an American who inspires me and why; or what freedom looks like where I live.", activities:[]},
+        {letter:"c", text:"Create a 60–90 second video or a poster series (suitable for social sharing) connecting the ideals of 1776 to life today. Youth need parent/guardian approval before any posting.", activities:[]},
+        {letter:"d", text:"Learn a skill or play a game from the 1700s.", sub:"Cub Scout activity ideas for this option:", activities:["carnival","candle","hopscotch","butter","sachet","johnny"]}
+      ]
+    },
+    {
+      id:4, title:"Founding Era Site Visit",
+      theme:"Engage directly with American history — in person or virtually.",
+      blurb:"Connect with historic places and events to deepen understanding of the Revolutionary era and the past 250 years.",
+      chooseOne:true,
+      options:[
+        {letter:"a", text:"Visit a site from the American founding era (1760–1805). Virtual tours qualify.", activities:[]},
+        {letter:"b", text:"Attend the National Jamboree \u201cAmerica250\u201d display.", activities:[]},
+        {letter:"c", text:"Research your local community's history and its development since 1776, and share what you learn with a family member, friend, or your unit.", activities:[]},
+        {letter:"d", text:"Participate in a 250th anniversary celebration event.", sub:"Cub Scout activity ideas for this option:", activities:["bday","parade","a250"]}
+      ]
+    },
+    {
+      id:5, title:"Service Milestone",
+      theme:"Part of Scouting America's Impact365 initiative.",
+      blurb:"Service is at the heart of this challenge — turn founding values into real action.",
+      chooseOne:false,
+      options:[
+        {letter:"", text:"Participate in a service project reflecting American founding ideals — community service, civic responsibility, liberty, equality, or the common good — then record and submit your service hours.", sub:"Cub Scout service-project ideas:", activities:["food","troops","more"]}
+      ]
+    }
+  ]
+};
+
+/* The all-in-one Pack Meeting plan */
+const MEETING = {
+  name:"Liberty in Action — Pack Meeting Plan",
+  kick:"One event · options 1b, 2a, 3d, 4d & service",
+  intro:"A hands-on 250th birthday party that brings history, citizenship, and service to life. Cubs travel through activity stations exploring liberty, colonial life, and service today — completing one option in each category by attending. Plan the details ahead so patches can be presented at the party.",
+  sections:[
+    {h:"Before the meeting", steps:[
+      {t:"30 days out: confirm access to the location."},
+      {t:"Make assignments at the committee/parents' meeting using the planner."},
+      {t:"Purchase supplies, including Liberty in Action patches."},
+      {t:"Send reminders 7 days, 3 days, and the morning of."},
+      {t:"Set up the location and activity stations; ask families to bring patriotic snacks (Cat. 4)."}
+    ]},
+    {h:"Gathering activity", steps:[{t:"Stars, Stripes & Sketches — build the pack mural as families arrive (Cat. 1, option b)."}]},
+    {h:"Opening flag ceremony — 250 Years of the American Flag", note:"6–8 Cub Scouts + leader. Props: current US flag, images of historic flags.", script:`SCOUT 1: Today, we celebrate 250 years of our nation's history.
+SCOUT 2: During those 250 years, our flag has changed as our country has grown.
+SCOUT 3: Each star represents a state, and each stripe reminds us of our original colonies.
+SCOUT 4: The flag stands for freedom, responsibility, and service to others.
+SCOUT 5: As Cub Scouts, we promise to do our best to live up to those values.
+SCOUT 6: Please stand and join us in honoring our flag.
+(Color Guard advances the flag.)
+LEADER: Please join me in the Pledge of Allegiance.
+SCOUT 1: Color Guard, post the colors.`},
+    {h:"Opening remarks", script:`Hello Cub Scouts and families! Today we're celebrating something amazing — a birthday party 250 years in the making!
+
+Two hundred and fifty years ago, in 1776, brave people made a big choice. They believed freedom was worth working for, protecting, and sharing — and because they had the courage to try, we are here today.
+
+Cub Scouts live by those same ideas. We do our best, help others, tell the truth, and work to be good citizens. Today we're also celebrating you — because you are part of America's story. Even the smallest actions can make a big difference!`},
+    {h:"Audience story", steps:[{t:"Cub Scouts Do Their Best! — the audience-participation story (Cat. 2, option a). Full script is in that option's activity card."}]},
+    {h:"Activity stations", note:"Three adult-led stations; Cubs rotate by den.", steps:[
+      {t:"Station 1: Colonial Games Carnival (Cat. 3, option d)."},
+      {t:"Station 2: Rolled Beeswax Candle Making (Cat. 3, option d)."},
+      {t:"Station 3: Cards for 10,000 for Troops (Cat. 5, service)."}
+    ]},
+    {h:"Refreshment break", steps:[{t:"Share patriotic snacks and birthday cake; sing \u201cHappy Birthday\u201d to America! (Cat. 4, option d)"}]},
+    {h:"Closing ceremony — Lighting the Way Forward", note:"Supplies: printed script, 6 flameless LED candles, one patch per participant.", script:`LEADER: Tonight, each of you took part in activities that helped you learn about our country, serve others, and live the values of freedom, responsibility, and citizenship. You've completed the requirements for the Liberty in Action patch — come see me to receive it.
+
+For 250 years, the light of our nation has been carried by people who believed in freedom. Tonight, we remember that light. (Lights candle 1.)
+
+SPEAKER 1: This candle represents freedom — making choices and standing up for what is right. (Lights candle 2.)
+SPEAKER 2: This candle represents responsibility — doing what you say and caring for others. (Lights candle 3.)
+SPEAKER 3: This candle represents service — helping our families, communities, and country. (Lights candle 4.)
+SPEAKER 4: This candle represents respect — treating people, our flag, and our nation with honor. (Lights candle 5.)
+SPEAKER 5: This candle represents hope — believing the future can be bright and doing your part. (Lights candle 6.)
+
+LEADER: Each light shines on its own, but together they shine brighter — just like the people of our country. America's future is built day by day. Tonight, that light is already shining… in Cub Scouts like you. Take your candle home and light it with your family. Congratulations on demonstrating Liberty in Action!`},
+    {h:"Closing flag ceremony", note:"Color Guard (2–4 Cub Scouts) + leader.", script:`LEADER (quietly): Please stand.
+LEADER (softly): Color Guard, retire the colors.
+(Color Guard retrieves the flag slowly and respectfully, then salutes.)
+LEADER (softly): The meeting is now closed. Good night.`}
+  ]
+};
+
+/* ============================================================ STATE ============================================================ */
+let progress = loadProgress();
+function optKey(rid,letter){ return "r"+rid+(letter||""); }
+function loadProgress(){ try{ return JSON.parse(localStorage.getItem("liberty_progress")||"{}"); }catch(e){ return {}; } }
+function saveProgress(){ try{ localStorage.setItem("liberty_progress", JSON.stringify(progress)); }catch(e){} }
+
+const ribbonSVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 13.5L7 22l5-3 5 3-2-8.5"/></svg>';
+const checkSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>';
+
+/* ---- build requirement list ---- */
+const reqList = document.getElementById("reqList");
+PROGRAM.requirements.forEach((r,ri)=>{
+  const sec=document.createElement("div");
+  sec.className="req"; sec.dataset.rid=r.id;
+  const opts=r.options.map((o,oi)=>{
+    const k=optKey(r.id,o.letter);
+    const checked=progress[k]?"checked":"";
+    const list=o.list?`<ul>${o.list.map(x=>`<li>${x}</li>`).join("")}</ul>`:"";
+    let ideas="";
+    if(o.activities.length){
+      const cards=o.activities.map(aid=>{
+        const a=A[aid];
+        const tags=a.tags.map(t=>`<span class="tag-pill">${t}</span>`).join("");
+        return `<button class="act" data-search="${(a.name+' '+a.snap+' '+a.tags.join(' ')).toLowerCase()}" onclick="event.stopPropagation();openActivity('${aid}','${k}',${ri})">
+          <h4>${a.name}</h4><div class="snap">${a.snap}</div><div class="tags">${tags}</div></button>`;
+      }).join("");
+      ideas=`<button class="ideas-toggle" onclick="event.stopPropagation();toggleIdeas(this)">${ribbonSVG}<span>${o.activities.length} Cub Scout activity ${o.activities.length>1?'ideas':'idea'}</span><svg class="cv" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="ideas-grid">${cards}</div>`;
+    }
+    const letter=o.letter?`<span class="opt-letter">${o.letter})</span>`:"";
+    const subline=o.sub?`<div class="opt-sub">${o.sub}</div>`:"";
+    return `<div class="opt ${checked}" data-key="${k}" data-search="${(o.text+' '+(o.list||[]).join(' ')).toLowerCase()}">
+      <div class="opt-check" onclick="toggleOption('${k}',${ri})">${checkSVG}</div>
+      <div class="opt-main">
+        <div class="opt-top">${letter}<div class="opt-text">${o.text}${list}</div></div>
+        ${subline}${ideas}
+      </div>
+    </div>`;
+  }).join("");
+  const chooseTxt = r.chooseOne ? `Choose one of the following` : `Complete the following`;
+  sec.innerHTML=`
+    <div class="req-head" onclick="toggleReq(this)">
+      <div class="req-num">${r.id}</div>
+      <div class="req-meta">
+        <div class="kick">Category ${r.id}</div>
+        <h3>${r.title}</h3>
+        <div class="theme">${r.theme}</div>
+      </div>
+      <div class="req-status">
+        <span class="req-count" data-count="${r.id}"></span>
+        <svg class="caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="req-body">
+      <div class="req-blurb">${r.blurb}</div>
+      <div class="choose-label">${chooseTxt}</div>
+      ${opts}
+    </div>`;
+  reqList.appendChild(sec);
+});
+
+function toggleReq(head){ head.parentElement.classList.toggle("open"); }
+function toggleIdeas(btn){ btn.classList.toggle("open"); btn.nextElementSibling.classList.toggle("open"); }
+
+function toggleOption(k,ri){
+  if(progress[k]) delete progress[k]; else progress[k]=true;
+  saveProgress();
+  refreshOption(k);
+  updateCounts();
+}
+function refreshOption(k){
+  const done=!!progress[k];
+  document.querySelectorAll(`.opt[data-key="${k}"]`).forEach(el=>el.classList.toggle("checked",done));
+}
+
+/* ---- Activity modal ---- */
+function openActivity(aid,optkey,ri){
+  const a=A[aid];
+  const renderSteps=(arr)=>arr.map(st=>{
+    const o=typeof st==="string"?{t:st}:st;
+    let html=`<li>${o.t}`;
+    if(o.link){ html+=` <a href="${o.link.url}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600">${o.link.label} ↗</a>`; }
+    if(o.sub){ html+=`<ul class="substep">${o.sub.map(s=>`<li>${s}</li>`).join("")}</ul>`; }
+    return html+`</li>`;
+  }).join("");
+  let body=`<div class="snapshot">${a.snap}</div>`;
+  body+=`<div class="block-h">Supply List</div><ul class="supplies">${a.supplies.map(s=>`<li>${s}</li>`).join("")}</ul>`;
+  if(a.before&&a.before.length) body+=`<div class="block-h">Before the meeting</div><ol class="steps">${renderSteps(a.before)}</ol>`;
+  if(a.during&&a.during.length) body+=`<div class="block-h">During the meeting</div><ol class="steps">${renderSteps(a.during)}</ol>`;
+  if(a.script) body+=`<div class="block-h">Script</div><div class="script">${a.script.replace(/\b(LEADER|AUDIENCE|SCOUT \d|SPEAKER \d)(\s*\([^)]*\))?:/g,'<b>$1$2:</b>')}</div>`;
+  body+=`<div class="block-h">Additional Resources</div>`;
+  body+= (a.resources&&a.resources.length)
+    ? `<div class="res">`+a.resources.map(rs=>`<div style="margin-bottom:6px">→ <a href="${rs.url}" target="_blank" rel="noopener">${rs.label} ↗</a></div>`).join("")+`</div>`
+    : `<div class="res-none">None listed in the guide.</div>`;
+  const r=PROGRAM.requirements[ri];
+  const done=!!progress[optkey];
+  const tags=a.tags.map(t=>`<span class="tag-pill">${t}</span>`).join("");
+  document.getElementById("modal").innerHTML=`
+    <div class="modal-top">
+      <button class="x-btn" onclick="closeModal()">✕</button>
+      <div class="kick">Category ${r.id} · ${r.title}</div>
+      <h3>${a.name}</h3>
+      <div class="tags">${tags}</div>
+    </div>
+    <div class="modal-body">${body}</div>
+    <div class="modal-foot">
+      <div class="ctx">Completing this satisfies Category ${r.id}${r.chooseOne?', option '+optkey.replace('r'+r.id,''):''}.</div>
+      <button class="toggle-done ${done?'is-done':''}" id="doneBtn" onclick="toggleDoneFromModal('${optkey}',${ri})">
+        ${done?'✓ Category option complete — tap to undo':'Mark this category option complete'}
+      </button>
+    </div>`;
+  showModal();
+}
+function toggleDoneFromModal(k,ri){
+  if(progress[k]) delete progress[k]; else progress[k]=true;
+  saveProgress();
+  const done=!!progress[k];
+  const btn=document.getElementById("doneBtn");
+  btn.classList.toggle("is-done",done);
+  btn.textContent=done?'✓ Category option complete — tap to undo':'Mark this category option complete';
+  refreshOption(k);
+  updateCounts();
+}
+
+/* ---- Meeting modal ---- */
+function openMeeting(){
+  let body=`<div class="snapshot">${MEETING.intro}</div>`;
+  MEETING.sections.forEach(s=>{
+    body+=`<div class="block-h">${s.h}</div>`;
+    if(s.note) body+=`<div style="font-style:italic;color:var(--ink-soft);font-size:.9rem;margin-bottom:8px">${s.note}</div>`;
+    if(s.steps) body+=`<ol class="steps">${s.steps.map(st=>`<li>${st.t}</li>`).join("")}</ol>`;
+    if(s.script) body+=`<div class="script">${s.script.replace(/\b(LEADER|AUDIENCE|SCOUT \d|SPEAKER \d)(\s*\([^)]*\))?:/g,'<b>$1$2:</b>')}</div>`;
+  });
+  document.getElementById("modal").innerHTML=`
+    <div class="modal-top">
+      <button class="x-btn" onclick="closeModal()">✕</button>
+      <div class="kick">${MEETING.kick}</div>
+      <h3>${MEETING.name}</h3>
+    </div>
+    <div class="modal-body">${body}</div>`;
+  showModal();
+}
+
+function showModal(){ const mb=document.getElementById("modalBack"); mb.classList.add("open"); mb.scrollTop=0; document.body.style.overflow="hidden"; }
+function closeModal(){ document.getElementById("modalBack").classList.remove("open"); document.body.style.overflow=""; }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* ---- Search ---- */
+function applyFilters(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  let any=false;
+  document.querySelectorAll(".req").forEach(req=>{
+    let shown=0;
+    req.querySelectorAll(".opt").forEach(opt=>{
+      const optTxt=opt.dataset.search;
+      const actTxt=[...opt.querySelectorAll(".act")].map(a=>a.dataset.search).join(" ");
+      const ok=!q||optTxt.includes(q)||actTxt.includes(q);
+      opt.style.display=ok?"":"none";
+      if(ok) shown++;
+      if(ok&&q){ const ig=opt.querySelector(".ideas-grid"); const tg=opt.querySelector(".ideas-toggle"); if(ig&&actTxt.includes(q)){ig.classList.add("open");tg&&tg.classList.add("open");} }
+    });
+    req.style.display=shown?"":"none";
+    if(shown){ any=true; if(q) req.classList.add("open"); }
+  });
+  document.getElementById("noResults").style.display=any?"none":"block";
+}
+
+/* ---- Counts + ring ---- */
+function updateCounts(){
+  let met=0;
+  PROGRAM.requirements.forEach(r=>{
+    let chosen=0;
+    r.options.forEach(o=>{ if(progress[optKey(r.id,o.letter)]) chosen++; });
+    const el=document.querySelector(`.req-count[data-count="${r.id}"]`);
+    const sec=document.querySelector(`.req[data-rid="${r.id}"]`);
+    if(chosen>0){ met++; sec.classList.add("done"); el.textContent="✓ Complete"; }
+    else{ sec.classList.remove("done"); el.textContent = r.chooseOne ? `Choose 1 of ${r.options.length}` : "Required"; }
+  });
+  const total=PROGRAM.requirements.length;
+  const frac=met/total, circ=2*Math.PI*16;
+  const rf=document.getElementById("ringFill");
+  rf.style.strokeDasharray=circ; rf.style.strokeDashoffset=circ*(1-frac);
+  rf.style.transition="stroke-dashoffset .4s ease";
+  rf.setAttribute("stroke", met===total ? "#6fcf97" : "#cba85a");
+  document.getElementById("ringNum").textContent=`${met}/${total}`;
+}
+
+function resetProgress(){
+  if(!confirm("Clear all checked options? This can't be undone.")) return;
+  progress={}; saveProgress();
+  document.querySelectorAll(".opt").forEach(o=>o.classList.remove("checked"));
+  updateCounts();
+}
+
+updateCounts();
+</script>
+</body>
+</html>
